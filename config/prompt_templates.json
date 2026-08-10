@@ -1,0 +1,41 @@
+{
+  "architect": "SATHVIKA BOINA",
+  "version": "1.0.0",
+  "templates": [
+    {
+      "id": "TMPL-001",
+      "name": "balance_enquiry_response",
+      "template": "Your NexBank {account_type} (Account No: {account_number}) has a live available balance of INR {balance}."
+    },
+    {
+      "id": "TMPL-002",
+      "name": "statement_request_response",
+      "template": "Dear {customer_name}, your account statement for Account No. {account_number} ({date_range}) has been generated (Ref: {ref}) and sent to your registered email ({email})."
+    },
+    {
+      "id": "TMPL-003",
+      "name": "card_block_confirmation",
+      "template": "⚠️ CONFIRMATION REQUIRED: Are you sure you want to permanently block your NexBank Debit Card ending in {last4}? Reply YES to confirm."
+    },
+    {
+      "id": "TMPL-004",
+      "name": "card_block_success",
+      "template": "🔒 Your NexBank Debit Card ending in {last4} has been permanently BLOCKED (Ref: {ref}). A new card replacement link has been sent to your registered mobile."
+    },
+    {
+      "id": "TMPL-005",
+      "name": "fraud_escalation_alert",
+      "template": "🚨 URGENT FRAUD ESCALATION: Your issue has been escalated to our Fraud Operations Desk (Ticket #{ticket_id}). Priority: P1 High. An agent will contact you within 5 minutes under Zero-Liability Protection."
+    },
+    {
+      "id": "TMPL-006",
+      "name": "sebi_disclaimer_attachment",
+      "template": "Disclaimer: Information provided is for educational purposes only. NexBank does not offer direct equity investment advice. Please consult a SEBI-registered financial advisor before making investment decisions."
+    },
+    {
+      "id": "TMPL-007",
+      "name": "prompt_injection_defense",
+      "template": "🛡️ SECURITY ALERT: System instruction overrides or prompt extraction requests are strictly prohibited under NexBank AI Security Policy."
+    }
+  ]
+}
