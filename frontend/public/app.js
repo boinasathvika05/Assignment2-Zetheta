@@ -60,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial Bank Profile State
   let bankProfile = JSON.parse(localStorage.getItem("nexbank_bank_profile") || JSON.stringify({
-    custName: "Sathvika Sharma",
+    custName: "SATHVIKA BOINA",
     accNum: "110294817502",
     accType: "Savings Account",
     accBal: "128450.00",
@@ -304,7 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await fetch("/api/v1/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email: "customer@nexbank.in", password: "Password123!", full_name: "Sathvika Sharma", role: "CUSTOMER" })
+          body: JSON.stringify({ email: "customer@nexbank.in", password: "Password123!", full_name: "SATHVIKA BOINA", role: "CUSTOMER" })
         });
         const relogin = await fetch("/api/v1/auth/login", {
           method: "POST",

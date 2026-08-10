@@ -145,7 +145,7 @@ async def get_simulation_modes():
     ]
 
     leaderboard = [
-        {"rank": 1, "player": "Sathvika (Conversational Architect)", "score": 980, "badge": "🏆 Level 10 Grandmaster", "accuracy": "99.4%"},
+        {"rank": 1, "player": "SATHVIKA BOINA (Conversational Architect)", "score": 980, "badge": "🏆 Level 10 Grandmaster", "accuracy": "99.4%"},
         {"rank": 2, "player": "Supervisor Alex", "score": 920, "badge": "🛡️ Ironclad Defender", "accuracy": "97.8%"},
         {"rank": 3, "player": "Risk Officer Priya", "score": 880, "badge": "🎯 NLU Architect", "accuracy": "96.2%"},
         {"rank": 4, "player": "AI Operator Rahul", "score": 840, "badge": "⚡ Speed Demon", "accuracy": "95.0%"}

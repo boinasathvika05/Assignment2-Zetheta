@@ -1,5 +1,8 @@
 # NexBank Agentic AI - Enterprise Production Deployment Guide
 
+**Author / Conversational AI Architect**: SATHVIKA BOINA  
+**Organization**: NexBank Digital Banking Platform  
+
 This guide provides step-by-step production deployment procedures for Docker Compose, Kubernetes, PostgreSQL, Redis, and ChromaDB.
 
 ---

@@ -1,5 +1,8 @@
 # NexBank Agentic AI - System Architecture & Technical Specifications
 
+**Author / Conversational AI Architect**: SATHVIKA BOINA  
+**Organization**: NexBank Digital Banking Platform  
+
 This document details the architectural design, clean architecture patterns, 3-tier NLU taxonomy, hybrid RAG engine, safety guardrails, and human escalation matrix for the NexBank Agentic AI platform.
 
 ---

@@ -1,5 +1,8 @@
 # NexBank Agentic AI - Requirement Traceability Matrix (RTM)
 
+**Author / Conversational AI Architect**: SATHVIKA BOINA  
+**Organization**: NexBank Digital Banking Platform  
+
 This matrix maps every functional requirement, non-functional requirement, safety guardrail, NLU taxonomy code, and architectural constraint from the official NexBank project specification (`463548C_Agentic-AI_Customer_Service_Agent.docx.pdf`) to its exact code implementation and test verification.
 
 ---

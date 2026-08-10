@@ -7,7 +7,8 @@
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-0.4.24-FF6F00.svg?style=flat)](https://www.trychroma.com/)
 [![License](https://img.shields.io/badge/License-Proprietary-blue.svg)](#)
 
-An enterprise-grade, production-ready Agentic AI Customer Service and Governance Platform built for **NexBank** (Mumbai, 2.7M active customers, 18,000 daily interactions). Built following Clean Architecture, SOLID principles, 3-tier hierarchical NLU, hybrid dense+sparse RAG, real-time safety guardrails, a 15-trigger escalation matrix, and continuous learning feedback loops.
+**Author / Conversational AI Architect**: SATHVIKA BOINA  
+**Organization**: NexBank Digital Banking Platform  
 
 ---
 

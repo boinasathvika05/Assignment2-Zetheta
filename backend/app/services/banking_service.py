@@ -44,7 +44,7 @@ class MockBankingCoreService:
     def request_statement(self, customer_id: str, date_range: str = "30_days", profile: Optional[Dict[str, Any]] = None) -> BankingActionResult:
         profile = profile or {}
         acc_num = profile.get("accNum") or profile.get("account_id") or "110294817502"
-        cust_name = profile.get("custName") or "Sathvika Sharma"
+        cust_name = profile.get("custName") or "SATHVIKA BOINA"
         email = profile.get("email") or "customer@nexbank.in"
         ref = f"STMT-{uuid.uuid4().hex[:8].upper()}"
         return BankingActionResult(

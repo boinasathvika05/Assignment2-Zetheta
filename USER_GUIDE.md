@@ -1,5 +1,8 @@
 # NexBank Agentic AI - Operational User Guide
 
+**Author / Conversational AI Architect**: SATHVIKA BOINA  
+**Organization**: NexBank Digital Banking Platform  
+
 This user guide provides operational instructions for all 5 authorized user roles operating the NexBank Agentic AI Customer Service & Governance Platform.
 
 ---
