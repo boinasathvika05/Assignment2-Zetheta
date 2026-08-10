@@ -26,6 +26,7 @@
         <button class="nav-item" data-tab="supervisor"><span class="icon">👨‍💼</span> Supervisor Console</button>
         <button class="nav-item" data-tab="analytics"><span class="icon">📊</span> Analytics & CSAT</button>
         <button class="nav-item" data-tab="guardrail"><span class="icon">🛡️</span> Safety & Guardrails</button>
+        <button class="nav-item" data-tab="simulation"><span class="icon">🎮</span> Simulation Sandbox</button>
         <button class="nav-item" data-tab="admin"><span class="icon">⚙️</span> Admin & RAG DB</button>
       </nav>
 
@@ -100,85 +101,74 @@
           <div class="account-panel glass-card">
             <h3>Account Overview</h3>
             <div class="card-widget">
-              <div class="card-brand">NexDebit VISA</div>
-              <div class="card-number" id="card-display-number">•••• •••• •••• 4521</div>
-              <div class="card-footer">
-                <div><span>VALID THRU</span><br><strong id="card-display-exp">12/28</strong></div>
-                <div><span>STATUS</span><br><strong class="text-success" id="card-display-status">ACTIVE</strong></div>
+              <div class="card-brand">NexBank Digital</div>
+              <div class="card-chip"></div>
+              <div class="card-number" id="widget-card-num">•••• •••• •••• 4521</div>
+              <div class="card-holder" id="widget-cust-name">Sathvika Sharma</div>
+              <div class="card-expiry">Status: <span id="widget-card-status">ACTIVE</span></div>
+            </div>
+
+            <div class="account-details">
+              <div class="detail-row">
+                <span>Account Number:</span>
+                <strong id="display-acc-num">110294817502</strong>
+              </div>
+              <div class="detail-row">
+                <span>Account Type:</span>
+                <strong id="display-acc-type">Savings Account</strong>
+              </div>
+              <div class="detail-row">
+                <span>Available Balance:</span>
+                <strong class="text-success" id="display-acc-bal">₹128,450.00</strong>
+              </div>
+              <div class="detail-row">
+                <span>IFSC Code:</span>
+                <strong id="display-ifsc">NXBK0008821</strong>
               </div>
             </div>
 
-            <div class="stats-list">
-              <div class="stat-item">
-                <span>Account Number</span>
-                <strong class="stat-val" id="disp-acc-num">110294817502</strong>
-              </div>
-              <div class="stat-item">
-                <span>Available Balance</span>
-                <strong class="stat-val text-success" id="disp-acc-bal">₹ 1,28,450.00</strong>
-              </div>
-              <div class="stat-item">
-                <span>Account Type</span>
-                <strong class="stat-val" id="disp-acc-type">Savings Account</strong>
-              </div>
-              <div class="stat-item">
-                <span>Customer ID</span>
-                <strong class="stat-val" id="disp-cust-id">CUST-882194</strong>
-              </div>
-              <div class="stat-item">
-                <span>Branch IFSC</span>
-                <strong class="stat-val" id="disp-ifsc">NXBK0008821</strong>
-              </div>
-            </div>
+            <!-- Interactive Bank Details Editor Form -->
+            <div class="bank-form-editor">
+              <h4>⚙️ Edit Bank & Account Details</h4>
+              <form id="form-update-bank-profile">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Customer Name</label>
+                    <input type="text" id="edit-cust-name" value="Sathvika Sharma" required />
+                  </div>
+                  <div class="form-group">
+                    <label>Account Number</label>
+                    <input type="text" id="edit-acc-num" value="110294817502" required />
+                  </div>
+                </div>
 
-            <!-- Interactive Bank Details Form -->
-            <div class="bank-details-editor">
-              <button class="btn btn-sm btn-outline full-width" id="btn-toggle-edit-bank">⚙️ Edit Bank & Account Details</button>
-              
-              <form id="form-bank-details" class="bank-edit-form hidden">
-                <h4>Customer & Bank Details Input</h4>
-                <div class="form-group">
-                  <label>Full Name</label>
-                  <input type="text" id="input-cust-name" value="Sathvika Sharma" />
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Available Balance (₹)</label>
+                    <input type="number" step="0.01" id="edit-acc-bal" value="128450.00" required />
+                  </div>
+                  <div class="form-group">
+                    <label>Debit Card Number</label>
+                    <input type="text" id="edit-card-num" value="4532111122224521" required />
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label>Customer ID</label>
-                  <input type="text" id="input-cust-id" value="CUST-882194" />
+
+                <div class="form-row">
+                  <div class="form-group">
+                    <label>Card Status</label>
+                    <select id="edit-card-status">
+                      <option value="ACTIVE" selected>ACTIVE</option>
+                      <option value="BLOCKED">BLOCKED</option>
+                      <option value="EXPIRED">EXPIRED</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label>IFSC Code</label>
+                    <input type="text" id="edit-ifsc" value="NXBK0008821" required />
+                  </div>
                 </div>
-                <div class="form-group">
-                  <label>Account Number</label>
-                  <input type="text" id="input-acc-num" value="110294817502" />
-                </div>
-                <div class="form-group">
-                  <label>Account Type</label>
-                  <select id="input-acc-type">
-                    <option value="Savings Account" selected>Savings Account</option>
-                    <option value="Current Account">Current Account</option>
-                    <option value="Salary Account">Salary Account</option>
-                    <option value="Fixed Deposit">Fixed Deposit</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Available Balance (₹)</label>
-                  <input type="number" step="0.01" id="input-acc-bal" value="128450.00" />
-                </div>
-                <div class="form-group">
-                  <label>Debit Card Number (Last 4 digits: 4521)</label>
-                  <input type="text" id="input-card-num" value="4532 1111 2222 4521" />
-                </div>
-                <div class="form-group">
-                  <label>Debit Card Status</label>
-                  <select id="input-card-status">
-                    <option value="ACTIVE" selected>ACTIVE</option>
-                    <option value="BLOCKED">BLOCKED</option>
-                    <option value="EXPIRED">EXPIRED</option>
-                  </select>
-                </div>
-                <div class="form-group">
-                  <label>Branch IFSC Code</label>
-                  <input type="text" id="input-ifsc" value="NXBK0008821" />
-                </div>
-                <button type="submit" class="btn btn-primary full-width" style="margin-top: 0.5rem;">💾 Save & Apply Bank Profile</button>
+
+                <button type="submit" class="btn btn-sm btn-primary full-width">💾 Save & Sync Bank Details</button>
               </form>
             </div>
           </div>
@@ -187,32 +177,18 @@
 
       <!-- TAB 2: Supervisor View -->
       <section id="tab-supervisor" class="tab-content">
-        <div class="dashboard-grid">
-          <div class="glass-card full-width">
-            <div class="card-header">
-              <h3>Live Escalation Queue & SLA Monitor</h3>
-              <span class="badge badge-warning">Real-Time Routing</span>
+        <div class="supervisor-grid">
+          <div class="glass-card">
+            <h3>Open Escalation Queue (15 Triggers)</h3>
+            <div class="queue-list" id="escalation-queue">
+              <div class="empty-state">Loading open escalations...</div>
             </div>
-            <div class="table-responsive">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>Escalation ID</th>
-                    <th>Conv ID</th>
-                    <th>Trigger Code</th>
-                    <th>Priority</th>
-                    <th>Target Queue</th>
-                    <th>SLA Mins</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody id="escalations-table-body">
-                  <tr>
-                    <td colspan="8" class="text-center">Loading live escalation queue...</td>
-                  </tr>
-                </tbody>
-              </table>
+          </div>
+
+          <div class="glass-card">
+            <h3>Human Handoff & Correction Terminal</h3>
+            <div id="handoff-details">
+              <p class="text-sub">Select an escalation from the queue to view full conversation history and submit corrections.</p>
             </div>
           </div>
         </div>
@@ -220,68 +196,129 @@
 
       <!-- TAB 3: Analytics View -->
       <section id="tab-analytics" class="tab-content">
-        <div class="kpi-grid">
-          <div class="kpi-card glass-card">
-            <h4>CSAT Score</h4>
-            <div class="kpi-value" id="kpi-csat">4.8 / 5.0</div>
-            <span class="kpi-sub text-success">Target: ≥ 4.50</span>
+        <div class="metrics-grid">
+          <div class="stat-card glass-card">
+            <span class="stat-label">Average CSAT</span>
+            <span class="stat-value" id="stat-csat">4.8 / 5.0</span>
+            <span class="stat-trend positive">↑ Target: 4.5</span>
           </div>
 
-          <div class="kpi-card glass-card">
-            <h4>Containment Rate</h4>
-            <div class="kpi-value">78.4%</div>
-            <span class="kpi-sub text-success">Target: ≥ 70.0%</span>
+          <div class="stat-card glass-card">
+            <span class="stat-label">Containment Rate</span>
+            <span class="stat-value">87.4%</span>
+            <span class="stat-trend positive">↑ 12.6% Escalation</span>
           </div>
 
-          <div class="kpi-card glass-card">
-            <h4>RAG P95 Latency</h4>
-            <div class="kpi-value">118 ms</div>
-            <span class="kpi-sub text-success">Budget: &lt; 200 ms</span>
+          <div class="stat-card glass-card">
+            <span class="stat-label">P95 NLU Latency</span>
+            <span class="stat-value">12.5 ms</span>
+            <span class="stat-trend positive">Sub-50ms Compliant</span>
           </div>
 
-          <div class="kpi-card glass-card">
-            <h4>Model Version</h4>
-            <div class="kpi-value" id="kpi-model">v1.0.0</div>
-            <span class="kpi-sub text-info">A/B: v1.1.0 (10%)</span>
+          <div class="stat-card glass-card">
+            <span class="stat-label">Model Version</span>
+            <span class="stat-value" id="stat-version">v1.0.0</span>
+            <span class="stat-sub">A/B Candidate: v1.1.0 (10%)</span>
           </div>
         </div>
       </section>
 
-      <!-- TAB 4: Guardrail View -->
+      <!-- TAB 4: Safety & Guardrails View -->
       <section id="tab-guardrail" class="tab-content">
-        <div class="dashboard-grid">
-          <div class="glass-card full-width">
-            <h3>Active Safety System & Guardrail Activity Log</h3>
-            <div class="guardrail-feed" id="guardrail-logs">
-              <div class="feed-item">
-                <span class="feed-time">10:42:15</span>
-                <span class="feed-tag tag-safe">[PROMPT_INJECTION]</span>
-                <span class="feed-msg">Blocked injection attempt: "ignore previous instructions". Action: BLOCKED.</span>
-              </div>
-              <div class="feed-item">
-                <span class="feed-time">10:41:02</span>
-                <span class="feed-tag tag-warn">[SEBI_DISCLAIMER]</span>
-                <span class="feed-msg">Investment query detected. Mandatory SEBI regulatory non-advisory disclaimer appended.</span>
-              </div>
-              <div class="feed-item">
-                <span class="feed-time">10:39:50</span>
-                <span class="feed-tag tag-info">[PII_MASKING]</span>
-                <span class="feed-msg">Redacted 10-digit PAN ABCDE1234F and 16-digit card number in transcript.</span>
-              </div>
+        <div class="glass-card">
+          <div class="card-header-flex" style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>Real-Time Guardrail Inspection Log Stream</h3>
+            <button class="btn btn-sm btn-outline" id="btn-export-audit">📥 Export Audit Logs (JSON/CSV)</button>
+          </div>
+          <div class="audit-stream" id="guardrail-logs">
+            <div class="log-entry">
+              <span class="log-time">10:42:01</span>
+              <span class="tag tag-safe">PROMPT_INJECTION</span>
+              <span>Sanitized user prompt: Blocked system prompt extraction payload.</span>
+            </div>
+            <div class="log-entry">
+              <span class="log-time">10:40:15</span>
+              <span class="tag tag-warn">PII_MASKED</span>
+              <span>PCI DSS Engine masked debit card number: 4532-XXXX-XXXX-4521.</span>
+            </div>
+            <div class="log-entry">
+              <span class="log-time">10:38:22</span>
+              <span class="tag tag-info">SEBI_DISCLAIMER</span>
+              <span>Appended mandatory SEBI investment risk disclaimer to PRD-005 turn response.</span>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- TAB 5: Admin View -->
+      <!-- TAB 5: Gamified Simulation Sandbox (Part B) -->
+      <section id="tab-simulation" class="tab-content">
+        <div class="dashboard-grid">
+          <div class="glass-card">
+            <h3>🎮 Part B: Gamified AI Sandbox & Business Simulation Engine</h3>
+            <p class="text-sub" style="margin-bottom: 1rem;">Test the NexBank Agentic AI engine against erratic customer scenarios, adversarial security attacks, and high-value compliance disputes to earn points, badges, and leaderboard rank.</p>
+
+            <div class="quick-role-presets" style="margin-bottom: 1.5rem;">
+              <span>Select Game Mode:</span>
+              <button class="chip" onclick="selectSimMode('chaos')">🌪️ Customer Chaos Mode</button>
+              <button class="chip" onclick="selectSimMode('security')">🛡️ Security Challenge Mode</button>
+              <button class="chip" onclick="selectSimMode('dispute')">⚖️ High-Value Dispute Mode</button>
+            </div>
+
+            <div class="sim-terminal glass-card" style="padding: 1.2rem; background: rgba(0,0,0,0.4); border-radius: 12px; margin-bottom: 1.5rem;">
+              <h4 id="sim-mode-title">Game Mode: 🌪️ Customer Chaos Mode</h4>
+              <p id="sim-mode-desc" class="text-sub" style="margin-bottom: 1rem;">Handle high-volume erratic customer inputs, slot ambiguity, and Hinglish queries under tight SLA.</p>
+              
+              <div class="form-group">
+                <label>Enter Test Sandbox Payload / Query:</label>
+                <input type="text" id="sim-input" value="Mera balance kitna hai aur passbook entry statement bhejo" />
+              </div>
+              <button class="btn btn-primary" id="btn-run-sim">Run Simulation Turn ➔</button>
+
+              <div id="sim-result-box" class="hidden" style="margin-top: 1rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <div style="display:flex; justify-content:space-between;">
+                  <strong class="text-success">Action: <span id="sim-action">-</span></strong>
+                  <span class="text-sub">Latency: <span id="sim-latency">42ms</span></span>
+                </div>
+                <p style="margin: 0.5rem 0;" id="sim-bot-out">-</p>
+                <div style="display:flex; gap: 1rem; margin-top: 0.5rem;">
+                  <span class="badge" style="background:#22c55e;">+<span id="sim-turn-pts">0</span> Points</span>
+                  <span class="badge" style="background:#6366f1;">Total Score: <span id="sim-total-pts">0</span></span>
+                  <span class="badge" id="sim-badge" style="background:#eab308; display:none;">-</span>
+                </div>
+              </div>
+            </div>
+
+            <h4>🏆 Gamification Leaderboard & Architect Ranks</h4>
+            <table class="table" style="width:100%; text-align:left; border-collapse:collapse; margin-top:0.5rem;">
+              <thead>
+                <tr style="border-bottom:1px solid rgba(255,255,255,0.1); padding:0.5rem;">
+                  <th>Rank</th>
+                  <th>Player / Architect</th>
+                  <th>Total Score</th>
+                  <th>Accuracy</th>
+                  <th>Badge Title</th>
+                </tr>
+              </thead>
+              <tbody id="sim-leaderboard-body">
+                <tr><td>#1 🥇</td><td>Sathvika (Conversational Architect)</td><td><strong>980 pts</strong></td><td>99.4%</td><td>🏆 Level 10 Grandmaster</td></tr>
+                <tr><td>#2 🥈</td><td>Supervisor Alex</td><td><strong>920 pts</strong></td><td>97.8%</td><td>🛡️ Ironclad Defender</td></tr>
+                <tr><td>#3 🥉</td><td>Risk Officer Priya</td><td><strong>880 pts</strong></td><td>96.2%</td><td>🎯 NLU Architect</td></tr>
+                <tr><td>#4</td><td>AI Operator Rahul</td><td><strong>840 pts</strong></td><td>95.0%</td><td>⚡ Speed Demon</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 6: Admin View -->
       <section id="tab-admin" class="tab-content">
         <div class="dashboard-grid">
           <div class="glass-card">
             <h3>Microservices Diagnostic Status</h3>
             <div class="stats-list" id="health-stats-list">
-              <div class="stat-item"><span>Database (PostgreSQL)</span><strong class="text-success">HEALTHY</strong></div>
-              <div class="stat-item"><span>Cache Pool (Redis)</span><strong class="text-success">HEALTHY</strong></div>
-              <div class="stat-item"><span>Vector DB (ChromaDB)</span><strong class="text-success">HEALTHY</strong></div>
+              <div class="stat-item"><span>Database (PostgreSQL / SQLite)</span><strong class="text-success">HEALTHY</strong></div>
+              <div class="stat-item"><span>Cache Pool (Redis State Memory)</span><strong class="text-success">HEALTHY</strong></div>
+              <div class="stat-item"><span>Vector DB (ChromaDB Hybrid Store)</span><strong class="text-success">HEALTHY</strong></div>
               <div class="stat-item"><span>NLU Taxonomy Engine</span><strong class="text-success">HEALTHY (32 Intents)</strong></div>
             </div>
           </div>

@@ -20,42 +20,42 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "account",
         "secondary": "account_info",
         "tertiary": "balance_check",
-        "keywords": ["balance", "account balance", "how much money", "kitna balance", "available balance", "savings balance", "kitna paisa", "savings account balance"],
+        "keywords": ["balance", "account balance", "how much money", "kitna balance", "available balance", "savings balance", "kitna paisa", "savings account balance", "mera balance", "balance batao", "paisa kitna hai"],
         "required_auth": "OTP_VERIFIED"
     },
     "ACC-002": {
         "primary": "account",
         "secondary": "account_info",
         "tertiary": "statement_request",
-        "keywords": ["statement", "account statement", "download statement", "bank statement", "e-statement", "passbook"],
+        "keywords": ["statement", "account statement", "download statement", "bank statement", "e-statement", "passbook", "statement bhej do", "passbook entry"],
         "required_auth": "OTP_VERIFIED"
     },
     "ACC-003": {
         "primary": "account",
         "secondary": "account_update",
         "tertiary": "update_contact",
-        "keywords": ["change phone number", "update mobile", "update email", "change email", "contact details update"],
+        "keywords": ["change phone number", "update mobile", "update email", "change email", "contact details update", "mobile number badlo"],
         "required_auth": "BIOMETRIC_VERIFIED"
     },
     "ACC-004": {
         "primary": "account",
         "secondary": "account_update",
         "tertiary": "update_address",
-        "keywords": ["change address", "update address", "mailing address", "residential address update"],
+        "keywords": ["change address", "update address", "mailing address", "residential address update", "address change karo"],
         "required_auth": "BIOMETRIC_VERIFIED"
     },
     "ACC-005": {
         "primary": "account",
         "secondary": "account_closure",
         "tertiary": "closure_request",
-        "keywords": ["close account", "close my account", "account closure", "terminate account"],
+        "keywords": ["close account", "close my account", "account closure", "terminate account", "account band karo"],
         "required_auth": "FULL_KYC"
     },
     "ACC-006": {
         "primary": "account",
         "secondary": "account_update",
         "tertiary": "nominee_update",
-        "keywords": ["add nominee", "update nominee", "change nominee", "nomination details"],
+        "keywords": ["add nominee", "update nominee", "change nominee", "nomination details", "nominee add karo"],
         "required_auth": "FULL_KYC"
     },
     "ACC-007": {
@@ -71,14 +71,14 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "transaction",
         "secondary": "transaction_status",
         "tertiary": "status_enquiry",
-        "keywords": ["transaction status", "check payment", "did transaction go through", "status of transfer", "money sent status"],
+        "keywords": ["transaction status", "check payment", "did transaction go through", "status of transfer", "money sent status", "payment status kya hai"],
         "required_auth": "OTP_VERIFIED"
     },
     "TXN-002": {
         "primary": "transaction",
         "secondary": "dispute",
         "tertiary": "raise_dispute",
-        "keywords": ["dispute transaction", "wrong debit", "charged twice", "double deduction", "chargeback", "merchant error", "dispute charge", "unauthorized charge"],
+        "keywords": ["dispute transaction", "wrong debit", "charged twice", "double deduction", "chargeback", "merchant error", "dispute charge", "unauthorized charge", "paise kat gaye", "galat transaction", "paise wapas karo"],
         "required_auth": "OTP_VERIFIED"
     },
     "TXN-003": {
@@ -115,14 +115,14 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "card",
         "secondary": "card_action",
         "tertiary": "block_unblock",
-        "keywords": ["block card", "unblock card", "lost debit card", "lost card", "block my card", "block my debit card", "stolen card", "freeze card", "lock card", "block it"],
+        "keywords": ["block card", "unblock card", "lost debit card", "lost card", "block my card", "block my debit card", "stolen card", "freeze card", "lock card", "block it", "card block karo", "mera card kho gaya", "card band karo"],
         "required_auth": "OTP_VERIFIED"
     },
     "CRD-002": {
         "primary": "card",
         "secondary": "card_action",
         "tertiary": "replacement",
-        "keywords": ["replace card", "card replacement", "damaged card", "reissue debit card"],
+        "keywords": ["replace card", "card replacement", "damaged card", "reissue debit card", "naya card chahiye"],
         "required_auth": "OTP_VERIFIED"
     },
     "CRD-003": {
@@ -136,7 +136,7 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "card",
         "secondary": "emi",
         "tertiary": "emi_conversion",
-        "keywords": ["convert to emi", "card emi", "transaction to emi", "split payment"],
+        "keywords": ["convert to emi", "card emi", "transaction to emi", "split payment", "emi pe kar do"],
         "required_auth": "OTP_VERIFIED"
     },
     "CRD-005": {
@@ -180,7 +180,7 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "product",
         "secondary": "advisory",
         "tertiary": "investment_recommendation",
-        "keywords": ["where to invest", "should i invest", "should i put", "best investment option", "recommend investment", "which scheme is better", "fd or mutual funds", "invest in fd"],
+        "keywords": ["where to invest", "should i invest", "should i put", "best investment option", "recommend investment", "which scheme is better", "fd or mutual funds", "invest in fd", "kahan invest karun", "paise kahan lagayein"],
         "required_auth": "ANONYMOUS"
     },
 
@@ -189,7 +189,7 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "complaint",
         "secondary": "grievance",
         "tertiary": "register_complaint",
-        "keywords": ["register complaint", "file a complaint", "bad service", "raise grievance", "terrible bank"],
+        "keywords": ["register complaint", "file a complaint", "bad service", "raise grievance", "terrible bank", "complaint likho"],
         "required_auth": "ANONYMOUS"
     },
     "CMP-002": {
@@ -217,7 +217,7 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "complaint",
         "secondary": "escalation",
         "tertiary": "supervisor_callback",
-        "keywords": ["call me back", "supervisor callback", "manager call", "talk to human"],
+        "keywords": ["call me back", "supervisor callback", "manager call", "talk to human", "manushya se baat karo"],
         "required_auth": "ANONYMOUS"
     },
 
@@ -226,7 +226,7 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "security",
         "secondary": "fraud",
         "tertiary": "report_fraud",
-        "keywords": ["unauthorized charge", "unauthorized transaction", "stole my details", "fraud", "stole my money", "money stolen", "hacked", "card stolen", "fraudulent charge", "someone stole"],
+        "keywords": ["unauthorized charge", "unauthorized transaction", "stole my details", "fraud", "stole my money", "money stolen", "hacked", "card stolen", "fraudulent charge", "someone stole", "paise chori ho gaye"],
         "required_auth": "ANONYMOUS"
     },
     "SEC-002": {
@@ -240,7 +240,7 @@ INTENT_TAXONOMY: Dict[str, Dict[str, Any]] = {
         "primary": "security",
         "secondary": "credentials",
         "tertiary": "reset_credentials",
-        "keywords": ["forgot password", "reset pin", "forgot netbanking password", "change pin"],
+        "keywords": ["forgot password", "reset pin", "forgot netbanking password", "change pin", "pin bhool gaya"],
         "required_auth": "OTP_VERIFIED"
     },
     "SEC-004": {
@@ -267,10 +267,10 @@ class HierarchicalIntentClassifier:
                 if kw in lower_text:
                     score += 0.45 + (len(kw) / 100.0)
             
-            # Additional heuristic combinations for Card Actions
-            if intent_id == "CRD-001" and ("block" in lower_text or "lost" in lower_text) and ("card" in lower_text or "debit" in lower_text):
+            # Additional heuristic combinations for Card Actions & Security
+            if intent_id == "CRD-001" and ("block" in lower_text or "lost" in lower_text or "kho" in lower_text) and ("card" in lower_text or "debit" in lower_text):
                 score += 0.50
-            if intent_id == "SEC-001" and ("stole" in lower_text or "unauthorized" in lower_text or "fraud" in lower_text):
+            if intent_id == "SEC-001" and ("stole" in lower_text or "unauthorized" in lower_text or "fraud" in lower_text or "chori" in lower_text):
                 score += 0.50
 
             scores[intent_id] = round(min(score, 0.98), 2)

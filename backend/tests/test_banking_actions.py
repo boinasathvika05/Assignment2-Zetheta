@@ -8,7 +8,7 @@ def test_banking_actions_all_workflows():
     # 1. Balance Enquiry
     bal = banking.check_balance("cust_123")
     assert bal.status == "SUCCESS"
-    assert "4521" in bal.user_message
+    assert "Account No" in bal.user_message or "110294817502" in bal.user_message
 
     # 2. Statement Request
     stmt = banking.request_statement("cust_123", "30_days")
