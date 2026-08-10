@@ -1,0 +1,12 @@
+{
+  "name": "nexbank-agentic-ai-frontend",
+  "version": "1.0.0",
+  "description": "NexBank Agentic AI Customer Service Agent Web Portal & Workstation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
