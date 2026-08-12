@@ -95,8 +95,10 @@ async def metrics_endpoint():
     return get_prometheus_metrics()
 
 
-# Mount API Router
+# Mount API Router (Multiple prefixes for Vercel Serverless rewrite routing compatibility)
 app.include_router(api_router, prefix=settings.API_V1_PREFIX)
+app.include_router(api_router, prefix="/v1")
+app.include_router(api_router, prefix="/api")
 
 # Health Check Root Endpoints
 @app.get("/health", tags=["Health"])
