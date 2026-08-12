@@ -1,0 +1,10 @@
+{
+  "name": "nexbank-agentic-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "NexBank Agentic AI Customer Service Agent Platform",
+  "scripts": {
+    "build": "echo 'Static assets ready in frontend/public'",
+    "start": "cd frontend && npm start"
+  }
+}
