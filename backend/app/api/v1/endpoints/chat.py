@@ -1,9 +1,9 @@
-from typing import List
+from typing import List, Optional
 from fastapi import APIRouter, Depends, status, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from app.api.deps import get_db, get_current_active_user
+from app.api.deps import get_db, get_current_active_user, get_optional_user
 from app.schemas.chat import StartConversationRequest, ChatMessageRequest, ChatMessageResponse, MessageRead
 from app.schemas.common import APIResponse
 from app.services.conversation_service import ConversationService
@@ -22,21 +22,22 @@ router = APIRouter()
 )
 async def start_conversation(
     req: StartConversationRequest,
-    current_user: User = Depends(get_current_active_user),
+    current_user: Optional[User] = Depends(get_optional_user),
     db: AsyncSession = Depends(get_db)
 ):
     conv_service = ConversationService(db)
-    
+    user_id = current_user.id if current_user else "default_customer_user_id"
+
     # Query CustomerProfile asynchronously to avoid greenlet implicit load errors
-    stmt = select(CustomerProfile).where(CustomerProfile.user_id == current_user.id)
+    stmt = select(CustomerProfile).where(CustomerProfile.user_id == user_id)
     res = await db.execute(stmt)
     cust_profile = res.scalars().first()
     
     if not cust_profile:
         # Create customer profile if missing
         cust_profile = CustomerProfile(
-            user_id=current_user.id,
-            phone_number=f"+91{current_user.id[:10]}",
+            user_id=user_id,
+            phone_number=f"+919876543210",
             segment="STANDARD"
         )
         db.add(cust_profile)
@@ -60,21 +61,22 @@ async def start_conversation(
 )
 async def process_message(
     req: ChatMessageRequest,
-    current_user: User = Depends(get_current_active_user),
+    current_user: Optional[User] = Depends(get_optional_user),
     db: AsyncSession = Depends(get_db)
 ):
     conv_service = ConversationService(db)
     conv_id = req.conversation_id
+    user_id = current_user.id if current_user else "default_customer_user_id"
 
     # Auto-initialize session if conversation_id is not provided yet
     if not conv_id:
-        stmt = select(CustomerProfile).where(CustomerProfile.user_id == current_user.id)
+        stmt = select(CustomerProfile).where(CustomerProfile.user_id == user_id)
         res = await db.execute(stmt)
         cust_profile = res.scalars().first()
         if not cust_profile:
             cust_profile = CustomerProfile(
-                user_id=current_user.id,
-                phone_number=f"+91{current_user.id[:10]}",
+                user_id=user_id,
+                phone_number=f"+919876543210",
                 segment="STANDARD"
             )
             db.add(cust_profile)

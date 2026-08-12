@@ -352,7 +352,7 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify(payload)
       });
 
-      const data = await res.json();
+      const data = await res.json().catch(() => ({}));
       if (res.ok && data.data) {
         if (data.data.conversation_id) {
           conversationId = data.data.conversation_id;
@@ -364,10 +364,12 @@ document.addEventListener("DOMContentLoaded", () => {
           loadEscalations();
         }
       } else {
-        appendMessage("An error occurred processing your turn. Please try again.", "bot");
+        const errMsg = data?.message || data?.error?.message || data?.detail || `HTTP Status ${res.status}`;
+        appendMessage(`⚠️ Server Response Error (${res.status}): ${errMsg}`, "bot");
       }
     } catch (e) {
-      appendMessage("Network connection error. Server is unreachable.", "bot");
+      console.error("Chat turn network error:", e);
+      appendMessage(`⚠️ Network Connection Error: ${e.message || 'Server unreachable'}. Check backend connection on port 3000.`, "bot");
     }
   }
 

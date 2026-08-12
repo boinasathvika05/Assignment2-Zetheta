@@ -10,6 +10,25 @@ from app.models.user import User
 from app.repositories.user_repository import UserRepository
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
+oauth2_scheme_optional = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login", auto_error=False)
+
+
+async def get_optional_user(
+    token: str = Depends(oauth2_scheme_optional),
+    db: AsyncSession = Depends(get_db)
+) -> User:
+    """Optional dependency extracting User from JWT if present, returning None otherwise."""
+    if not token:
+        return None
+    try:
+        payload = decode_token(token)
+        user_id: str = payload.get("sub")
+        if not user_id:
+            return None
+        user_repo = UserRepository(db)
+        return await user_repo.get_by_id(user_id)
+    except Exception:
+        return None
 
 
 async def get_current_user(
