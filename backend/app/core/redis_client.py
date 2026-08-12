@@ -5,22 +5,29 @@ from app.core.config import settings
 from app.core.logging import logger
 
 redis_pool: Optional[aioredis.Redis] = None
+_redis_disabled: bool = False
 
 
 async def get_redis_client() -> Optional[aioredis.Redis]:
     """Get or initialize the global async Redis client."""
-    global redis_pool
+    global redis_pool, _redis_disabled
+    if _redis_disabled:
+        return None
+
     if redis_pool is None:
         try:
-            redis_pool = aioredis.from_url(
+            client = aioredis.from_url(
                 settings.REDIS_URL,
                 encoding="utf-8",
                 decode_responses=True,
-                socket_timeout=0.3,
-                socket_connect_timeout=0.3
+                socket_timeout=0.1,
+                socket_connect_timeout=0.1
             )
+            await client.ping()
+            redis_pool = client
         except Exception as e:
-            logger.warning(f"Failed to initialize Redis pool: {str(e)}")
+            logger.warning(f"Redis unavailable (operating in memory/DB fallback mode): {str(e)}")
+            _redis_disabled = True
             return None
     return redis_pool
 
