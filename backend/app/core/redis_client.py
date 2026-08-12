@@ -16,7 +16,8 @@ async def get_redis_client() -> Optional[aioredis.Redis]:
                 settings.REDIS_URL,
                 encoding="utf-8",
                 decode_responses=True,
-                socket_timeout=2.0
+                socket_timeout=0.3,
+                socket_connect_timeout=0.3
             )
         except Exception as e:
             logger.warning(f"Failed to initialize Redis pool: {str(e)}")

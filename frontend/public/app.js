@@ -1,4 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Dynamic API Base URL Detection (Port 3000 for local dev / file / Live Server, relative for Vercel deployment)
+  const API_BASE_URL = (window.location.protocol === "file:" || window.location.port === "5500" || window.location.port === "5501" || window.location.port === "8080" || window.location.port === "63342")
+    ? "http://localhost:3000"
+    : "";
+
   // Navigation & Tab Switching
   const navItems = document.querySelectorAll(".nav-item");
   const tabContents = document.querySelectorAll(".tab-content");
@@ -154,7 +159,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const role = document.getElementById("login-role").value;
 
     try {
-      const res = await fetch("/api/v1/auth/login", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password })
@@ -188,7 +193,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const role = document.getElementById("reg-role").value;
 
     try {
-      const res = await fetch("/api/v1/auth/register", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ full_name: fullName, email, password, phone_number: phone, role })
@@ -220,7 +225,7 @@ document.addEventListener("DOMContentLoaded", () => {
     btnSeedKb.disabled = true;
     btnSeedKb.textContent = "⏳ Seeding Vector DB...";
     try {
-      const res = await fetch("/api/v1/knowledge/seed", { method: "POST" });
+      const res = await fetch(`${API_BASE_URL}/api/v1/knowledge/seed`, { method: "POST" });
       const data = await res.json();
       alert("✅ " + (data.message || "Knowledge Base seeded with 50+ banking policies into ChromaDB."));
     } catch (e) {
@@ -260,7 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const headers = { "Content-Type": "application/json" };
       if (authToken) headers["Authorization"] = `Bearer ${authToken}`;
 
-      const startRes = await fetch("/api/v1/chat/start", {
+      const startRes = await fetch(`${API_BASE_URL}/api/v1/chat/start`, {
         method: "POST",
         headers: headers,
         body: JSON.stringify({ channel: "web" })
@@ -291,7 +296,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Auto-init Auth & Chat Session
   async function initSession() {
     try {
-      const loginRes = await fetch("/api/v1/auth/login", {
+      const loginRes = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: "customer@nexbank.in", password: "Password123!" })
@@ -301,12 +306,12 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = await loginRes.json();
         authToken = data.data.access_token;
       } else {
-        await fetch("/api/v1/auth/register", {
+        await fetch(`${API_BASE_URL}/api/v1/auth/register`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: "customer@nexbank.in", password: "Password123!", full_name: "SATHVIKA BOINA", role: "CUSTOMER" })
         });
-        const relogin = await fetch("/api/v1/auth/login", {
+        const relogin = await fetch(`${API_BASE_URL}/api/v1/auth/login`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: "customer@nexbank.in", password: "Password123!" })
@@ -341,7 +346,7 @@ document.addEventListener("DOMContentLoaded", () => {
       };
       if (conversationId) payload.conversation_id = conversationId;
 
-      const res = await fetch("/api/v1/chat/message", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/chat/message`, {
         method: "POST",
         headers: headers,
         body: JSON.stringify(payload)
@@ -377,7 +382,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!queueDiv) return;
 
     try {
-      const res = await fetch("/api/v1/governance/escalations", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/governance/escalations`, {
         headers: authToken ? { "Authorization": `Bearer ${authToken}` } : {}
       });
       const data = await res.json();
@@ -421,7 +426,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const text = document.getElementById("supervisor-corr-text").value.trim();
     if (!text) return;
     try {
-      const res = await fetch("/api/v1/governance/supervisor-review", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/governance/supervisor-review`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -447,7 +452,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Load Metrics for Analytics Dashboard
   async function loadMetrics() {
     try {
-      const res = await fetch("/api/v1/governance/metrics");
+      const res = await fetch(`${API_BASE_URL}/api/v1/governance/metrics`);
       const data = await res.json();
       if (data.success && data.data) {
         document.getElementById("stat-csat").textContent = `${data.data.average_csat} / 5.0`;
@@ -491,7 +496,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const startTime = performance.now();
       try {
-        const res = await fetch("/api/v1/governance/simulation/play", {
+        const res = await fetch(`${API_BASE_URL}/api/v1/governance/simulation/play`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
@@ -531,7 +536,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (btnExportAudit) {
     btnExportAudit.addEventListener("click", async () => {
       try {
-        const res = await fetch("/api/v1/governance/audit-logs/export", {
+        const res = await fetch(`${API_BASE_URL}/api/v1/governance/audit-logs/export`, {
           headers: authToken ? { "Authorization": `Bearer ${authToken}` } : {}
         });
         const data = await res.json();
