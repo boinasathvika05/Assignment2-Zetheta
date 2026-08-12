@@ -13,6 +13,28 @@ from app.models.customer import CustomerProfile
 router = APIRouter()
 
 
+async def get_effective_user(db: AsyncSession, current_user: Optional[User]) -> User:
+    if current_user:
+        return current_user
+    stmt = select(User).where(User.email == "customer@nexbank.in")
+    res = await db.execute(stmt)
+    user = res.scalars().first()
+    if not user:
+        from app.core.security import get_password_hash
+        from app.core.enums import UserRole
+        user = User(
+            email="customer@nexbank.in",
+            password_hash=get_password_hash("Password123!"),
+            full_name="SATHVIKA BOINA",
+            role=UserRole.CUSTOMER,
+            is_active=True
+        )
+        db.add(user)
+        await db.flush()
+        await db.refresh(user)
+    return user
+
+
 @router.post(
     "/start",
     response_model=APIResponse[dict],
@@ -26,7 +48,8 @@ async def start_conversation(
     db: AsyncSession = Depends(get_db)
 ):
     conv_service = ConversationService(db)
-    user_id = current_user.id if current_user else "default_customer_user_id"
+    user = await get_effective_user(db, current_user)
+    user_id = user.id
 
     # Query CustomerProfile asynchronously to avoid greenlet implicit load errors
     stmt = select(CustomerProfile).where(CustomerProfile.user_id == user_id)
@@ -34,14 +57,21 @@ async def start_conversation(
     cust_profile = res.scalars().first()
     
     if not cust_profile:
-        # Create customer profile if missing
+        # Create customer profile if missing with unique phone number
+        clean_uid = user_id.replace("-", "")[:10]
         cust_profile = CustomerProfile(
             user_id=user_id,
-            phone_number=f"+919876543210",
+            phone_number=f"+91{clean_uid}",
             segment="STANDARD"
         )
-        db.add(cust_profile)
-        await db.flush()
+        try:
+            db.add(cust_profile)
+            await db.flush()
+        except Exception:
+            await db.rollback()
+            stmt_retry = select(CustomerProfile).where(CustomerProfile.user_id == user_id)
+            res_retry = await db.execute(stmt_retry)
+            cust_profile = res_retry.scalars().first()
 
     conv = await conv_service.start_conversation(customer_id=cust_profile.id, channel=req.channel)
     
@@ -66,7 +96,8 @@ async def process_message(
 ):
     conv_service = ConversationService(db)
     conv_id = req.conversation_id
-    user_id = current_user.id if current_user else "default_customer_user_id"
+    user = await get_effective_user(db, current_user)
+    user_id = user.id
 
     # Auto-initialize session if conversation_id is not provided yet
     if not conv_id:
@@ -74,13 +105,20 @@ async def process_message(
         res = await db.execute(stmt)
         cust_profile = res.scalars().first()
         if not cust_profile:
+            clean_uid = user_id.replace("-", "")[:10]
             cust_profile = CustomerProfile(
                 user_id=user_id,
-                phone_number=f"+919876543210",
+                phone_number=f"+91{clean_uid}",
                 segment="STANDARD"
             )
-            db.add(cust_profile)
-            await db.flush()
+            try:
+                db.add(cust_profile)
+                await db.flush()
+            except Exception:
+                await db.rollback()
+                stmt_retry = select(CustomerProfile).where(CustomerProfile.user_id == user_id)
+                res_retry = await db.execute(stmt_retry)
+                cust_profile = res_retry.scalars().first()
         conv = await conv_service.start_conversation(customer_id=cust_profile.id, channel="web")
         conv_id = conv.id
 
