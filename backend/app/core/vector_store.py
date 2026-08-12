@@ -26,9 +26,10 @@ def get_vector_store():
 
     if _chroma_client is None:
         try:
-            os.makedirs(settings.CHROMA_PERSIST_DIRECTORY, exist_ok=True)
+            persist_dir = "/tmp/chroma_data" if (os.getenv("VERCEL") == "1" or os.getenv("VERCEL_ENV") is not None) else settings.CHROMA_PERSIST_DIRECTORY
+            os.makedirs(persist_dir, exist_ok=True)
             _chroma_client = chromadb.PersistentClient(
-                path=settings.CHROMA_PERSIST_DIRECTORY,
+                path=persist_dir,
                 settings=ChromaSettings(allow_reset=True, anonymized_telemetry=False)
             )
             _chroma_collection = _chroma_client.get_or_create_collection(

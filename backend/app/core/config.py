@@ -43,6 +43,8 @@ class Settings(BaseSettings):
         extra = "ignore"
 
     def get_database_url(self) -> str:
+        if os.getenv("VERCEL") == "1" or os.getenv("VERCEL_ENV") is not None:
+            return "sqlite+aiosqlite:////tmp/nexbank_local.db"
         return self.DATABASE_URL or f"postgresql+asyncpg://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}@{self.POSTGRES_HOST}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
 
     def get_redis_url(self) -> str:
