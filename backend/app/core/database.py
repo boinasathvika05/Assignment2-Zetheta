@@ -26,8 +26,23 @@ AsyncSessionLocal = async_sessionmaker(
 )
 
 
+_db_initialized = False
+
+
+async def ensure_db_initialized() -> None:
+    global _db_initialized
+    if not _db_initialized:
+        try:
+            async with engine.begin() as conn:
+                await conn.run_sync(Base.metadata.create_all)
+            _db_initialized = True
+        except Exception as e:
+            logger.error(f"Database initialization error: {str(e)}")
+
+
 async def get_db() -> AsyncGenerator[AsyncSession, None]:
     """Dependency provider for FastAPI endpoint database sessions."""
+    await ensure_db_initialized()
     async with AsyncSessionLocal() as session:
         try:
             yield session

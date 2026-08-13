@@ -110,7 +110,9 @@ async def root_health():
         "environment": settings.ENVIRONMENT
     }
 
-# Serve Frontend Dashboard
-frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/public"))
-if os.path.exists(frontend_dir):
-    app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")
+# Serve Frontend Dashboard (Local Uvicorn development only)
+is_serverless = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+if not is_serverless:
+    frontend_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../frontend/public"))
+    if os.path.exists(frontend_dir):
+        app.mount("/", StaticFiles(directory=frontend_dir, html=True), name="frontend")

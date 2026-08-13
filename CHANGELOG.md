@@ -200,11 +200,11 @@ This document tracks daily progress over the 15-day period in strict accordance 
   - **Explicit Development CORS (`.env`, `.env.example`, `config.py`)**: Configured explicit development origins (`localhost:3000`, `127.0.0.1:3000`, `localhost:5500`, `127.0.0.1:5500`, `localhost:8080`, `127.0.0.1:8080`, `localhost:8000`, `127.0.0.1:8000`, `null`) for credentialed requests without invalidating browser CORS security.
   - **RBAC RequireRole Dependency Fix (`deps.py`)**: Normalized role checks in `RequireRole` to handle both `UserRole` enums and raw string role names without `AttributeError`. Added `test_require_role_rbac_authorization` unit test.
   - **EscalationPriority Enum Synchronization (`enums.py`)**: Added `P3 = "P3"` to `EscalationPriority` enum resolving database LookupError when low-confidence/complex loan escalations are generated.
-  - **Vercel Serverless Function Invocation Fix (`api/index.py`, `vercel.json`, `requirements.txt`, `redis_client.py`)**:
-    - Resolved `FUNCTION_INVOCATION_FAILED` on Vercel by expanding root `requirements.txt` to include `uvicorn`, `redis`, `asyncpg`, `alembic`.
-    - Wrapped `redis` import in `redis_client.py` with `try/except ImportError` block so missing optional packages do not crash module load in serverless environments.
-    - Updated `api/index.py` to set `VERCEL="1"` environment flag and exported `handler = app` for Vercel serverless runtime.
-    - Added `/health`, `/metrics`, `/redoc` route rewrites to `vercel.json`.
+  - **Vercel Serverless Function Invocation Hardening (`api/index.py`, `logging.py`, `main.py`, `database.py`, `vercel.json`, `requirements.txt`, `redis_client.py`)**:
+    - Resolved `FUNCTION_INVOCATION_FAILED` on Vercel AWS Lambda by switching to standard `logging.StreamHandler` in serverless non-TTY environments, eliminating terminal TTY crashes caused by `RichHandler`.
+    - Added lazy `ensure_db_initialized()` schema creation in `database.py` during `get_db()` execution, guaranteeing SQLite tables exist in `/tmp/nexbank_local.db` on cold serverless invocations.
+    - Wrapped root `app.mount("/", StaticFiles(...))` in `main.py` to prevent static file route interception on Vercel CDN.
+    - Expanded root `requirements.txt` with backend packages (`uvicorn`, `redis`, `asyncpg`, `alembic`) and exported `handler = app` in `api/index.py`.
 * **Verification Executed**:
   - Ran 25 / 25 Pytest unit and integration tests (100% PASS RATE).
   - Tested direct backend health endpoint (`http://localhost:8000/api/v1/health` $\rightarrow$ `200 OK`).

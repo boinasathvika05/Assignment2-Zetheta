@@ -4,6 +4,8 @@ from contextvars import ContextVar
 from typing import Optional
 from rich.logging import RichHandler
 
+import os
+
 correlation_id_ctx: ContextVar[Optional[str]] = ContextVar("correlation_id", default=None)
 
 
@@ -27,9 +29,21 @@ def setup_logging(log_level: str = "INFO") -> logging.Logger:
     logger.addFilter(CorrelationIdFilter())
 
     if not logger.handlers:
-        handler = RichHandler(rich_tracebacks=True, show_time=True, show_path=False)
-        formatter = logging.Formatter("[%(correlation_id)s] %(message)s")
-        handler.setFormatter(formatter)
+        is_serverless = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))
+        if is_serverless or not sys.stdout.isatty():
+            handler = logging.StreamHandler(sys.stdout)
+            formatter = logging.Formatter("%(asctime)s [%(levelname)s] [%(correlation_id)s] %(message)s")
+            handler.setFormatter(formatter)
+        else:
+            try:
+                from rich.logging import RichHandler
+                handler = RichHandler(rich_tracebacks=True, show_time=True, show_path=False)
+                formatter = logging.Formatter("[%(correlation_id)s] %(message)s")
+                handler.setFormatter(formatter)
+            except Exception:
+                handler = logging.StreamHandler(sys.stdout)
+                formatter = logging.Formatter("%(asctime)s [%(levelname)s] [%(correlation_id)s] %(message)s")
+                handler.setFormatter(formatter)
         logger.addHandler(handler)
 
     return logger
