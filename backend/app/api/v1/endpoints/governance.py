@@ -222,18 +222,19 @@ async def play_simulation_turn(req: SimulationPlayRequest):
     dependencies=[Depends(RequireRole(["SYSTEM_ADMIN", "SUPERVISOR", "RISK_OFFICER"]))]
 )
 async def export_audit_logs(db: AsyncSession = Depends(get_db)):
-    stmt = select(AuditLog).order_by(AuditLog.timestamp.desc()).limit(100)
+    stmt = select(AuditLog).order_by(AuditLog.created_at.desc()).limit(100)
     res = await db.execute(stmt)
     logs = res.scalars().all()
 
     data = [
         {
             "id": l.id,
-            "event_type": l.event_type,
             "user_id": l.user_id,
+            "conversation_id": l.conversation_id,
             "action": l.action,
-            "resource": l.resource,
-            "timestamp": l.timestamp.isoformat(),
+            "ip_address": l.ip_address,
+            "pii_flag": l.pii_flag,
+            "timestamp": l.created_at.isoformat() if l.created_at else None,
             "details": l.details_json
         }
         for l in logs
