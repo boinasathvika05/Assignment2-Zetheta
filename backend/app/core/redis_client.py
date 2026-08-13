@@ -1,17 +1,23 @@
 import time
 from typing import Dict, Any, Optional
-import redis.asyncio as aioredis
 from app.core.config import settings
 from app.core.logging import logger
 
-redis_pool: Optional[aioredis.Redis] = None
+try:
+    import redis.asyncio as aioredis
+    HAS_REDIS = True
+except ImportError:
+    HAS_REDIS = False
+    aioredis = None
+
+redis_pool: Optional[Any] = None
 _redis_disabled: bool = False
 
 
-async def get_redis_client() -> Optional[aioredis.Redis]:
+async def get_redis_client() -> Optional[Any]:
     """Get or initialize the global async Redis client."""
     global redis_pool, _redis_disabled
-    if _redis_disabled:
+    if not HAS_REDIS or _redis_disabled:
         return None
 
     if redis_pool is None:
