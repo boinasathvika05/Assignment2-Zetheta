@@ -153,3 +153,33 @@ async def test_token_refresh_and_logout():
         logout_resp = await ac.post("/api/v1/auth/logout", json={"refresh_token": new_refresh_token})
         assert logout_resp.status_code == 200
         assert logout_resp.json()["data"]["revoked"] is True
+
+
+@pytest.mark.asyncio
+async def test_require_role_rbac_authorization():
+    """Verify RequireRole allows authorized role and returns 403 Forbidden for unauthorized role."""
+    cust_email = f"rbac.cust.{uuid.uuid4().hex[:6]}@nexbank.in"
+    sup_email = f"rbac.sup.{uuid.uuid4().hex[:6]}@nexbank.in"
+    
+    async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
+        # Register Customer and Supervisor
+        await ac.post("/api/v1/auth/register", json={"email": cust_email, "password": "Password123!", "full_name": "Cust", "role": "CUSTOMER"})
+        await ac.post("/api/v1/auth/register", json={"email": sup_email, "password": "Password123!", "full_name": "Sup", "role": "SUPERVISOR"})
+
+        # Login Customer
+        c_login = await ac.post("/api/v1/auth/login", json={"email": cust_email, "password": "Password123!"})
+        c_token = c_login.json()["data"]["access_token"]
+
+        # Login Supervisor
+        s_login = await ac.post("/api/v1/auth/login", json={"email": sup_email, "password": "Password123!"})
+        s_token = s_login.json()["data"]["access_token"]
+
+        # 1. Customer attempts supervisor-only endpoint -> 403 Forbidden without crash
+        resp_403 = await ac.get("/api/v1/governance/escalations", headers={"Authorization": f"Bearer {c_token}"})
+        assert resp_403.status_code == 403
+        assert "Access forbidden" in resp_403.json()["detail"]
+
+        # 2. Supervisor accesses supervisor endpoint -> 200 OK
+        resp_200 = await ac.get("/api/v1/governance/escalations", headers={"Authorization": f"Bearer {s_token}"})
+        assert resp_200.status_code == 200
+

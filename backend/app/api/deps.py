@@ -1,4 +1,4 @@
-from typing import List, Callable
+from typing import List, Callable, Any, Optional
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -74,13 +74,15 @@ class RequireRole:
     Role-Based Access Control (RBAC) Dependency Guard.
     Enforces that the current authenticated user possesses one of the allowed UserRoles.
     """
-    def __init__(self, allowed_roles: List[UserRole]):
-        self.allowed_roles = allowed_roles
+    def __init__(self, allowed_roles: List[Any]):
+        self.allowed_roles = [r.value if hasattr(r, "value") else str(r) for r in allowed_roles]
 
     def __call__(self, current_user: User = Depends(get_current_active_user)) -> User:
-        if current_user.role not in self.allowed_roles:
+        user_role = current_user.role.value if hasattr(current_user.role, "value") else str(current_user.role)
+        if user_role not in self.allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
-                detail=f"Access forbidden. Action requires one of roles: {[r.value for r in self.allowed_roles]}"
+                detail=f"Access forbidden. Action requires one of roles: {self.allowed_roles}"
             )
         return current_user
+

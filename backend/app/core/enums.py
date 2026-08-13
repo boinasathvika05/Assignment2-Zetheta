@@ -27,6 +27,7 @@ class EscalationPriority(str, Enum):
     P0 = "P0"  # Critical Security / Fraud / Crisis (<2 min SLA)
     P1 = "P1"  # High Priority Legal / High Value / Retention (<5 min SLA)
     P2 = "P2"  # General Support / Technical / Overflow (<10-15 min SLA)
+    P3 = "P3"  # Low Priority / Standard Enquiry (<60 min SLA)
 
 
 class ResolutionStatus(str, Enum):

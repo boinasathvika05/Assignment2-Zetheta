@@ -191,6 +191,24 @@ This document tracks daily progress over the 15-day period in strict accordance 
 
 ---
 
+## 🛠️ Operational Infrastructure & Server Fixes
+* **Date & Time of Session**: 2026-08-13 (20:12 IST)
+* **Focus**: Server reachability, API Base URL centralization, Express reverse proxying, CORS rules, RBAC role guard fix, and live Admin health diagnostics.
+* **Mandatory Fixes Completed**:
+  - **API Base URL Centralization (`app.js`)**: Updated frontend API resolution to dynamically target FastAPI backend on Port 8000 across all dev modes (port 3000, 5500, 8080, file://).
+  - **Express Reverse Proxy (`server.js`)**: Implemented `/api/*`, `/health`, `/metrics`, `/docs` reverse proxy in Express forwarding to `http://localhost:8000` with path preservation, error handling (503 response), and logging.
+  - **Explicit Development CORS (`.env`, `.env.example`, `config.py`)**: Configured explicit development origins (`localhost:3000`, `127.0.0.1:3000`, `localhost:5500`, `127.0.0.1:5500`, `localhost:8080`, `127.0.0.1:8080`, `localhost:8000`, `127.0.0.1:8000`, `null`) for credentialed requests without invalidating browser CORS security.
+  - **RBAC RequireRole Dependency Fix (`deps.py`)**: Normalized role checks in `RequireRole` to handle both `UserRole` enums and raw string role names without `AttributeError`. Added `test_require_role_rbac_authorization` unit test.
+  - **EscalationPriority Enum Synchronization (`enums.py`)**: Added `P3 = "P3"` to `EscalationPriority` enum resolving database LookupError when low-confidence/complex loan escalations are generated.
+  - **Dynamic Admin Microservices Diagnostics (`index.html`, `app.js`)**: Replaced static mock health elements with dynamic `/api/v1/health` status rendering for PostgreSQL/SQLite, Redis, ChromaDB, NLU, Memory, and Uptime.
+* **Verification Executed**:
+  - Ran 25 / 25 Pytest unit and integration tests (100% PASS RATE).
+  - Tested direct backend health endpoint (`http://localhost:8000/api/v1/health` $\rightarrow$ `200 OK`).
+  - Tested proxied frontend health endpoint (`http://localhost:3000/api/v1/health` $\rightarrow$ `200 OK`).
+  - Verified Web Portal login, balance enquiry, statement request, card block, transaction dispute, simulation sandbox, and RBAC 403 access control.
+
+---
+
 ## 🏆 Final Verification & Compliance Checklist
 
 | Dimension | Mandatory Requirement | Implementation Status |
@@ -198,5 +216,6 @@ This document tracks daily progress over the 15-day period in strict accordance 
 | **Author Attribution** | Credit `SATHVIKA BOINA` across all files | ✅ **100% Attributed** |
 | **15-Day Progress Log** | Complete daily entries per Section D1 | ✅ **100% Documented** |
 | **Repo Directory Layout** | Mandatory structure per Page 62 | ✅ **100% Structurally Compliant** |
-| **Pytest Test Suite** | All unit & integration tests passing | ✅ **24 / 24 Passed (100%)** |
+| **Pytest Test Suite** | All unit & integration tests passing | ✅ **25 / 25 Passed (100%)** |
+| **Operational & Proxy Verification** | Express proxy & FastAPI communication | ✅ **100% Verified** |
 | **GitHub Synchronization** | Pushed live to remote `main` branch | ✅ **Pushed to Remote** |

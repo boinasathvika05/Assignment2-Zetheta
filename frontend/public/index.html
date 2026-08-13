@@ -314,12 +314,16 @@
       <section id="tab-admin" class="tab-content">
         <div class="dashboard-grid">
           <div class="glass-card">
-            <h3>Microservices Diagnostic Status</h3>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+              <h3>Microservices Diagnostic Status</h3>
+              <button class="btn btn-sm btn-outline" id="btn-refresh-admin-health">🔄 Refresh System Health</button>
+            </div>
             <div class="stats-list" id="health-stats-list">
-              <div class="stat-item"><span>Database (PostgreSQL / SQLite)</span><strong class="text-success">HEALTHY</strong></div>
-              <div class="stat-item"><span>Cache Pool (Redis State Memory)</span><strong class="text-success">HEALTHY</strong></div>
-              <div class="stat-item"><span>Vector DB (ChromaDB Hybrid Store)</span><strong class="text-success">HEALTHY</strong></div>
-              <div class="stat-item"><span>NLU Taxonomy Engine</span><strong class="text-success">HEALTHY (32 Intents)</strong></div>
+              <div class="stat-item"><span>Database (PostgreSQL / SQLite)</span><strong class="text-sub" id="admin-status-db">⏳ Checking status...</strong></div>
+              <div class="stat-item"><span>Cache Pool (Redis State Memory)</span><strong class="text-sub" id="admin-status-redis">⏳ Checking status...</strong></div>
+              <div class="stat-item"><span>Vector DB (ChromaDB Hybrid Store)</span><strong class="text-sub" id="admin-status-vector">⏳ Checking status...</strong></div>
+              <div class="stat-item"><span>NLU Taxonomy Engine</span><strong class="text-sub" id="admin-status-nlu">⏳ Checking status...</strong></div>
+              <div class="stat-item"><span>System Memory & Uptime</span><strong class="text-sub" id="admin-status-resources">⏳ Checking status...</strong></div>
             </div>
           </div>
         </div>

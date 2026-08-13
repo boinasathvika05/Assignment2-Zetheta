@@ -14,7 +14,17 @@ class Settings(BaseSettings):
     SECRET_KEY: str = "NEXBANK_SUPER_SECRET_JWT_KEY_PROD_2026_CHANGE_ME"
 
     # CORS Configuration
-    CORS_ORIGINS: List[str] = ["*"]
+    CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        "http://localhost:8080",
+        "http://127.0.0.1:8080",
+        "http://localhost:8000",
+        "http://127.0.0.1:8000",
+        "null"
+    ]
 
     # Database Settings
     POSTGRES_USER: str = "nexbank_user"
