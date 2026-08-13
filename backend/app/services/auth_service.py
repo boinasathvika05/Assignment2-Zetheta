@@ -1,7 +1,9 @@
+import uuid
 from datetime import datetime, timezone, timedelta
 from typing import Tuple, Optional
 from fastapi import HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
+from sqlalchemy import select
 
 from app.core.security import get_password_hash, verify_password, create_access_token, create_refresh_token, decode_token, REFRESH_TOKEN_EXPIRE_DAYS
 from app.core.enums import UserRole, AuthLevel
@@ -44,8 +46,15 @@ class AuthService:
         user = await self.user_repo.create(new_user)
 
         # If user is a CUSTOMER, create corresponding CustomerProfile entity
-        if user.role == UserRole.CUSTOMER:
-            phone = user_in.phone_number or f"+91{user.id[:10]}"
+        if user.role == UserRole.CUSTOMER or str(user.role).upper() == "CUSTOMER":
+            phone = user_in.phone_number or f"+91{str(uuid.uuid4().int)[:10]}"
+            # Check if phone number already exists
+            existing_profile = (await self.db.execute(
+                select(CustomerProfile).where(CustomerProfile.phone_number == phone)
+            )).scalar_one_or_none()
+            if existing_profile:
+                phone = f"+91{str(uuid.uuid4().int)[:10]}"
+            
             profile = CustomerProfile(
                 user_id=user.id,
                 phone_number=phone,
