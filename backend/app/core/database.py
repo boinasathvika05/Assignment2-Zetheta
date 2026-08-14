@@ -1,7 +1,10 @@
 import time
+import sys
+import os
 from typing import AsyncGenerator, Dict, Any
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 from sqlalchemy import text
+from sqlalchemy.pool import NullPool
 
 from app.core.config import settings
 from app.core.logging import logger
@@ -9,12 +12,18 @@ import app.models  # Ensures all models are registered with Base.metadata!
 from app.models.base import Base
 
 # Create SQLAlchemy Async Engine
-engine = create_async_engine(
-    settings.get_database_url(),
-    echo=settings.DEBUG,
-    future=True,
-    pool_pre_ping=True
-)
+db_url = settings.get_database_url()
+is_testing = bool(os.getenv("PYTEST_CURRENT_TEST") or "pytest" in sys.modules)
+
+engine_kwargs = {
+    "echo": settings.DEBUG,
+    "future": True,
+    "pool_pre_ping": True,
+}
+if is_testing:
+    engine_kwargs["poolclass"] = NullPool
+
+engine = create_async_engine(db_url, **engine_kwargs)
 
 # Create Async Session Factory
 AsyncSessionLocal = async_sessionmaker(

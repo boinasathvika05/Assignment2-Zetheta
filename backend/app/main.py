@@ -48,10 +48,15 @@ app = FastAPI(
 app.add_middleware(ProductionInfrastructureMiddleware)
 
 # CORS Configuration
+cors_origins = settings.CORS_ORIGINS
+allow_creds = True
+if isinstance(cors_origins, list) and "*" in cors_origins:
+    allow_creds = False
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=settings.CORS_ORIGINS,
-    allow_credentials=True,
+    allow_origins=cors_origins,
+    allow_credentials=allow_creds,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -95,12 +100,7 @@ async def metrics_endpoint():
     return get_prometheus_metrics()
 
 
-# Mount API Router (Multiple prefixes for Vercel Serverless rewrite routing compatibility)
-app.include_router(api_router, prefix=settings.API_V1_PREFIX)
-app.include_router(api_router, prefix="/v1")
-app.include_router(api_router, prefix="/api")
-
-# Health Check Root Endpoints
+# Health Check Root Endpoint
 @app.get("/health", tags=["Health"])
 async def root_health():
     return {
@@ -109,6 +109,13 @@ async def root_health():
         "version": settings.APP_VERSION,
         "environment": settings.ENVIRONMENT
     }
+
+
+# Mount API Router (Multiple prefixes for Vercel Serverless rewrite routing compatibility)
+app.include_router(api_router, prefix=settings.API_V1_PREFIX)
+app.include_router(api_router, prefix="/v1")
+app.include_router(api_router, prefix="/api")
+app.include_router(api_router, prefix="")
 
 # Serve Frontend Dashboard (Local Uvicorn development only)
 is_serverless = bool(os.getenv("VERCEL") or os.getenv("VERCEL_ENV") or os.getenv("AWS_LAMBDA_FUNCTION_NAME"))

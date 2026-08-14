@@ -2,8 +2,6 @@ import logging
 import sys
 from contextvars import ContextVar
 from typing import Optional
-from rich.logging import RichHandler
-
 import os
 
 correlation_id_ctx: ContextVar[Optional[str]] = ContextVar("correlation_id", default=None)

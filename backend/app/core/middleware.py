@@ -1,13 +1,18 @@
 import time
 from fastapi import Request, Response
 from starlette.middleware.base import BaseHTTPMiddleware
-from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
 
 from app.core.logging import logger
 
-# Prometheus Metrics Collectors
-REQUEST_COUNT = Counter("http_requests_total", "Total HTTP requests", ["method", "endpoint", "status_code"])
-REQUEST_LATENCY = Histogram("http_request_duration_seconds", "HTTP request duration in seconds", ["method", "endpoint"])
+try:
+    from prometheus_client import Counter, Histogram, generate_latest, CONTENT_TYPE_LATEST
+    PROMETHEUS_AVAILABLE = True
+    REQUEST_COUNT = Counter("http_requests_total", "Total HTTP requests", ["method", "endpoint", "status_code"])
+    REQUEST_LATENCY = Histogram("http_request_duration_seconds", "HTTP request duration in seconds", ["method", "endpoint"])
+except ImportError:
+    PROMETHEUS_AVAILABLE = False
+    REQUEST_COUNT = None
+    REQUEST_LATENCY = None
 
 
 class ProductionInfrastructureMiddleware(BaseHTTPMiddleware):
@@ -28,8 +33,12 @@ class ProductionInfrastructureMiddleware(BaseHTTPMiddleware):
         status_code = str(response.status_code)
 
         # 1. Update Prometheus Metrics
-        REQUEST_COUNT.labels(method=method, endpoint=endpoint, status_code=status_code).inc()
-        REQUEST_LATENCY.labels(method=method, endpoint=endpoint).observe(latency)
+        if PROMETHEUS_AVAILABLE and REQUEST_COUNT and REQUEST_LATENCY:
+            try:
+                REQUEST_COUNT.labels(method=method, endpoint=endpoint, status_code=status_code).inc()
+                REQUEST_LATENCY.labels(method=method, endpoint=endpoint).observe(latency)
+            except Exception:
+                pass
 
         # 2. Inject Security Headers (PCI DSS & OWASP Top 10)
         response.headers["X-Frame-Options"] = "DENY"
@@ -43,4 +52,6 @@ class ProductionInfrastructureMiddleware(BaseHTTPMiddleware):
 
 def get_prometheus_metrics() -> Response:
     """Endpoint handler returning Prometheus metrics scrape format."""
-    return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
+    if PROMETHEUS_AVAILABLE:
+        return Response(content=generate_latest(), media_type=CONTENT_TYPE_LATEST)
+    return Response(content="# Prometheus metrics not available", media_type="text/plain")
