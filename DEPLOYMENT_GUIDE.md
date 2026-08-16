@@ -2,8 +2,9 @@
 
 **Author / Conversational AI Architect**: SATHVIKA BOINA  
 **Organization**: NexBank Digital Banking Platform  
+**Live Production URL**: [customer-feedback-agent-orcin.vercel.app](https://customer-feedback-agent-orcin.vercel.app/)  
 
-This guide provides step-by-step production deployment procedures for Docker Compose, Kubernetes, PostgreSQL, Redis, and ChromaDB.
+This guide provides step-by-step production deployment procedures for Vercel, Docker Compose, Kubernetes, PostgreSQL, Redis, and ChromaDB.
 
 ---
 
